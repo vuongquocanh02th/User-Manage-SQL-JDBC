@@ -28,14 +28,40 @@ public class UserServlet extends HttpServlet {
         if (action == null) {
             action = "";
         }
-        switch (action) {
-            case "create":
-                insertUser(req, resp);
-                break;
-            case "edit":
-                updateUser(req, resp);
-                break;
+        try {
+            switch (action) {
+                case "create":
+                    insertUser(req, resp);
+                    break;
+                case "edit":
+                    updateUser(req, resp);
+                    break;
+                case "sort":
+                    sortUserByName(req, resp);
+                    break;
+                case "search":
+                    searchUserByCountry(req, resp);
+                    break;
+            }
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
         }
+
+    }
+
+    private void searchUserByCountry(HttpServletRequest req, HttpServletResponse resp) throws SQLException, ServletException, IOException {
+        String country = req.getParameter("country");
+        List<User> users = userDAO.findByCountry(country);
+        req.setAttribute("listUser", users);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("user/list.jsp");
+        dispatcher.forward(req, resp);
+    }
+
+    private void sortUserByName(HttpServletRequest req, HttpServletResponse resp) throws SQLException, ServletException, IOException {
+        List<User> users=userDAO.sortByName();
+        req.setAttribute("listUser", users);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("user/list.jsp");
+        dispatcher.forward(req, resp);
     }
 
     private void updateUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -74,7 +100,7 @@ public class UserServlet extends HttpServlet {
         if (action == null) {
             action = "";
         }
-        try{
+        try {
             switch (action) {
                 case "create":
                     showCreateForm(req, resp);
@@ -89,7 +115,7 @@ public class UserServlet extends HttpServlet {
                     listUser(req, resp);
                     break;
             }
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             throw new ServletException(ex);
         }
 
