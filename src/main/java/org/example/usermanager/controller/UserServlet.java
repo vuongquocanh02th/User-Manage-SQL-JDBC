@@ -79,16 +79,14 @@ public class UserServlet extends HttpServlet {
         dispatcher.forward(req, resp);
     }
 
-    private void insertUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void insertUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String country = req.getParameter("country");
         User newUser = new User(name, email, country);
-        try {
-            userDAO.insertUser(newUser);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        //userDAO.insertUser(newUser);
+        userDAO.insertUserStore(newUser);
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/create.jsp");
         dispatcher.forward(req, resp);
 
@@ -140,7 +138,8 @@ public class UserServlet extends HttpServlet {
 
     private void showEditForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        User existingUser = userDAO.selectUser(id);
+        //User existingUser = userDAO.selectUser(id);
+        User existingUser = userDAO.getUserById(id);
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/edit.jsp");
         req.setAttribute("existingUser", existingUser);
         dispatcher.forward(req, resp);
