@@ -44,11 +44,9 @@
                     <input type="checkbox" name="view" size="15">view
                 </td>
             <tr>
-                <td colspan="2" align="center">--%>
+                <td colspan="2" align="center">
                     <input type="submit" value="Save">
                 </td>
-            </tr>
-
             </tr>
         </table>
     </form>
