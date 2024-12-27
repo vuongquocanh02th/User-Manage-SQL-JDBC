@@ -18,27 +18,37 @@
                 <h2>Add new User</h2>
             </caption>
             <tr>
-                <th>User Name: </th>
+                <th>User Name:</th>
                 <td>
                     <input type="text" name="name" id="name" size="45">
                 </td>
             </tr>
             <tr>
-                <th>User Email: </th>
+                <th>User Email:</th>
                 <td>
                     <input type="text" name="email" id="email" size="45">
                 </td>
             </tr>
             <tr>
-                <th>Country: </th>
+                <th>Country:</th>
                 <td>
                     <input type="text" name="country" id="country" size="15">
                 </td>
             </tr>
             <tr>
-                <td colspan="2" align="center">
+                <th>Permission:</th>
+                <td>
+                    <input type="checkbox" name="add" size="15">add |
+                    <input type="checkbox" name="edit" size="15">edit |
+                    <input type="checkbox" name="delete" size="15">delete |
+                    <input type="checkbox" name="view" size="15">view
+                </td>
+            <tr>
+                <td colspan="2" align="center">--%>
                     <input type="submit" value="Save">
                 </td>
+            </tr>
+
             </tr>
         </table>
     </form>
