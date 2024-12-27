@@ -32,6 +32,12 @@ public class UserDAO implements IUserDAO {
             + ")";
     private static final String SQL_TABLE_DROP = "DROP TABLE IF EXISTS EMPLOYEE";
 
+
+    private static final String GET_ALL_USERS_PROC = "{CALL getAllUsers()}";
+    private static final String UPDATE_USER_PROC = "{CALL updateUser(?,?,?,?)}";
+    private static final String DELETE_USER_PROC = "{CALL deleteUser(?)}";
+
+
     public UserDAO() {
     }
 
@@ -369,5 +375,53 @@ public class UserDAO implements IUserDAO {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<User> getAllUserProc() {
+        List<User> users = new ArrayList<>();
+        try(Connection conn = getConnection();
+        CallableStatement statement = conn.prepareCall(GET_ALL_USERS_PROC);
+        ResultSet resultSet = statement.executeQuery()){
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String country = resultSet.getString("country");
+                users.add(new User(id, name, email, country));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    @Override
+    public boolean updateUserProc(User user) {
+        boolean rowUpdated = false;
+        try(Connection conn = getConnection();
+        CallableStatement statement = conn.prepareCall(UPDATE_USER_PROC)){
+            statement.setInt(1, user.getId());
+            statement.setString(2, user.getName());
+            statement.setString(3, user.getEmail());
+            statement.setString(4, user.getCountry());
+            rowUpdated = statement.executeUpdate() > 0;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return rowUpdated;
+    }
+
+    @Override
+    public boolean deleteUserProc(int id) {
+        boolean rowDeleted = false;
+        try(Connection conn = getConnection();
+        CallableStatement statement = conn.prepareCall(DELETE_USER_PROC)){
+            statement.setInt(1, id);
+            rowDeleted = statement.executeUpdate() > 0;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return rowDeleted;
     }
 }

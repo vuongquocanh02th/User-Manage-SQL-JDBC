@@ -43,6 +43,9 @@ public class UserServlet extends HttpServlet {
                 case "search":
                     searchUserByCountry(req, resp);
                     break;
+                case "update-user-with-proc":
+                    updateUserWithProc(req, resp);
+                    break;
             }
         } catch (SQLException ex) {
             throw new ServletException(ex);
@@ -80,6 +83,15 @@ public class UserServlet extends HttpServlet {
         dispatcher.forward(req, resp);
     }
 
+    private void updateUserWithProc(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+        String country = req.getParameter("country");
+        User user = new User(id, name, email, country);
+        userDAO.updateUserProc(user);
+        resp.sendRedirect("/users");
+    }
     private void insertUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
@@ -135,6 +147,13 @@ public class UserServlet extends HttpServlet {
                     break;
                 case "test-use-tran":
                     testUseTran(req, resp);
+                    break;
+                case "get-all-proc":
+                    getAllUserWithProc(req, resp);
+                    break;
+                case "delete-proc":
+                    deleteUserWithProc(req, resp);
+                    break;
                 default:
                     listUser(req, resp);
                     break;
@@ -143,6 +162,17 @@ public class UserServlet extends HttpServlet {
             throw new ServletException(ex);
         }
 
+    }
+
+    private void deleteUserWithProc(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        int id = Integer.parseInt(req.getParameter("id"));
+        userDAO.deleteUserProc(id);
+        resp.sendRedirect("/users");
+    }
+
+
+    private void getAllUserWithProc(HttpServletRequest req, HttpServletResponse resp) {
+        userDAO.getAllUserProc();
     }
 
     private void testUseTran(HttpServletRequest req, HttpServletResponse resp) {

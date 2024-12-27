@@ -27,4 +27,11 @@ public interface IUserDAO {
     public void insertUpdateWithoutTransaction();
 
     public void insertUpdateUseTransaction();
+
+    List<User> getAllUserProc();
+
+    boolean updateUserProc(User user);
+
+    boolean deleteUserProc(int id);
+
 }
